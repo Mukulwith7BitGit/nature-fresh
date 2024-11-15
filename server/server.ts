@@ -15,14 +15,23 @@ let port: number | undefined = Number(process.env.PORT)
 let mongoDbUrl: string | undefined = process.env.MONGODB_URL;
 
 // mongoDb connection
-if (mongoDbUrl) {
-    mongoose.connect(mongoDbUrl).then((response: Mongoose) => {
+async function connectDB() {
+    // avoid call-back hell (a readability issue) 
+    // using async-await instead of using promise,then,reject,resolve
+    try {
+        // type-narrowing to refine variable of multiple types
+        if (!mongoDbUrl) {
+            throw new Error("MongoDB connection URL is not defined.");
+        }
+        await mongoose.connect(mongoDbUrl);
         console.log("Connected to MongoDB successfully...");
-    }).catch((err) => {
-        console.error(err);
+    } catch (err) {
+        console.error("Connection error: ", err);
         process.exit(1);
-    })
+    }
 }
+
+connectDB();
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.status(200).json({
