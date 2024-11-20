@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose, { Mongoose } from 'mongoose';
+import apiRouter from './router/apiRouter';
 
 
 const app: express.Application = express();
@@ -38,6 +39,8 @@ app.get('/', (req: express.Request, res: express.Response) => {
         msg: 'Welcome to Express Server of Nature Fresh App!'
     })
 });
+
+app.use('/api/v1', apiRouter);
 
 if (port && hostName) {
     app.listen(port, hostName, () => {
