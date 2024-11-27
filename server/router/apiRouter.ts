@@ -1,4 +1,6 @@
 import express, { response } from 'express';
+import mongoose from 'mongoose';
+import ProductTable from '../database/schemas/ProductSchema';
 
 const apiRouter: express.Router = express.Router();
 
@@ -9,10 +11,69 @@ apiRouter.get('/', (req: express.Request, res: express.Response) => {
 });
 
 //create product
-apiRouter.post('/products', (req: express.Request, res: express.Response) => {
-    res.status(200).json({
-        msg: 'Create a product'
-    });
+apiRouter.post('/products', async (req: express.Request, res: express.Response): Promise<any> => {
+    try {
+        let product = {
+            name: req.body.name,
+            image: req.body.image,
+            price: req.body.price,
+            quantity: req.body.quantity,
+            info: req.body.info
+        };
+
+        //in short we can write it as: 
+        // let { name, image, price, quantity, info } = req.body;
+        // let product = { name, image, price, quantity, info };
+
+        // status 400: "Bad Request" error, 
+        //indicates that the server was unable to process a request due to a client error
+        if (!product.name || !product.price || !product.quantity) {
+            return res.status(400).json({
+                msg: "Invalid input! Name, price, and quantity are required."
+            });
+        }
+
+        //check if product already exists
+        let isExistingProduct = await ProductTable.findOne({ name: product.name });
+        if (isExistingProduct) {
+            // 401: authentication err
+            // 409: duplicate data err
+            return res.status(409).json({
+                msg: "Product already exists!"
+            });
+        }
+
+        /* in ts plain objects are different from mongoose model objects
+        * mongoose objects bring methods like save() along with them.
+        * so there is a clear type mismatch and ts will not auto change 
+        * type when re-assigning an old variable having its own type
+        * since it can break code somewhere else in a large codebase,
+        * this is called type widening or type persistence.
+        * 
+        * 
+        * So if reassigning an old object type casting must be done like 
+        * product = new ProductTable(product) as Product;
+        * product = await product.save();
+        * else use a new variable for this action.
+        */
+
+        let newProduct = new ProductTable(product);
+        product = await newProduct.save(); //insert into db
+
+        /* alternatively mongoose also provides a create method that does 
+        * both instantiation and saving at same time
+        * product = await ProductTable.create(product);
+        */
+
+        res.status(200).json({
+            msg: "Product created successfully!"
+        });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    }
 });
 
 //get all products
