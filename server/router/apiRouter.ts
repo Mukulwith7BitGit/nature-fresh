@@ -93,12 +93,52 @@ apiRouter.get('/products/:productId', (req: express.Request, res: express.Respon
 });
 
 //update product
-apiRouter.put('/products/:productId', (req: express.Request, res: express.Response) => {
+apiRouter.put('/products/:productId', async (req: express.Request, res: express.Response): Promise<any> => {
+    // this is called destructuring of variables used to unpack properties from an object
     let { productId }: any = req.params;
-    res.status(200).json({
-        msg: 'Update a product',
-        productId: productId
-    });
+    try {
+        let updatedProduct = {
+            name: req.body.name,
+            image: req.body.image,
+            price: req.body.price,
+            quantity: req.body.quantity,
+            info: req.body.info
+        };
+
+        //check if product exists
+        let product = await ProductTable.findById(productId);
+        if (!product) {
+            return res.status(404).json({
+                msg: "Product Not Found!",
+                productId: productId
+            });
+        }
+
+        //update product if exists
+        product = await ProductTable.findByIdAndUpdate(productId, {
+            // note that productId was auto gen by mongo so even if string format is passed,
+            // it will auto convert it to mongoId internally, works only for _id field
+
+            $set: {
+                name: updatedProduct.name ? updatedProduct.name : product.name,
+                image: updatedProduct.image ? updatedProduct.image : product.image,
+                price: updatedProduct.price ? updatedProduct.price : product.price,
+                quantity: updatedProduct.quantity ? updatedProduct.quantity : product.quantity,
+                info: updatedProduct.info ? updatedProduct.info : product.info,
+            }
+        }, { new: true });
+
+        res.status(200).json({
+            msg: "Product is updated successfully!",
+            productId: productId
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    }
 });
 
 //delete product
