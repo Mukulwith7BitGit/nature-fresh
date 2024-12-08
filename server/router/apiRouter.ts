@@ -1,6 +1,6 @@
 import express, { response } from 'express';
-import mongoose from 'mongoose';
 import ProductTable from '../database/schemas/ProductSchema';
+import { Product } from '../database/models/Product';
 
 const apiRouter: express.Router = express.Router();
 
@@ -38,9 +38,7 @@ apiRouter.post('/products', async (req: express.Request, res: express.Response):
         if (isExistingProduct) {
             // 401: authentication err
             // 409: duplicate data err
-            return res.status(409).json({
-                msg: "Product already exists!"
-            });
+            return res.status(409).json(isExistingProduct);
         }
 
         /* in ts plain objects are different from mongoose model objects
@@ -65,31 +63,46 @@ apiRouter.post('/products', async (req: express.Request, res: express.Response):
         * product = await ProductTable.create(product);
         */
 
-        res.status(200).json({
-            msg: "Product created successfully!"
-        });
+        res.status(200).json(product);
     } catch (err) {
         console.log(err);
         res.status(500).json({
             error: err
-        })
+        });
     }
 });
 
 //get all products
-apiRouter.get('/products', (req: express.Request, res: express.Response) => {
-    res.status(200).json({
-        msg: 'Get all products'
-    });
+apiRouter.get('/products', async (req: express.Request, res: express.Response): Promise<any> => {
+    try {
+        let products: Product[] = await ProductTable.find();
+        res.status(200).json(products);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    }
 });
 
 //get single product
-apiRouter.get('/products/:productId', (req: express.Request, res: express.Response) => {
+apiRouter.get('/products/:productId', async (req: express.Request, res: express.Response): Promise<any> => {
     let { productId }: any = req.params;
-    res.status(200).json({
-        msg: 'Get a single product',
-        productId: productId
-    });
+    try {
+        let product: Product | null = await ProductTable.findById(productId);
+        if (!product) {
+            return res.status(404).json({
+                msg: 'Product Not Found!',
+                productId: productId
+            });
+        }
+        res.status(200).json(product);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    }
 });
 
 //update product
@@ -128,26 +141,35 @@ apiRouter.put('/products/:productId', async (req: express.Request, res: express.
             }
         }, { new: true });
 
-        res.status(200).json({
-            msg: "Product is updated successfully!",
-            productId: productId
-        });
+        res.status(200).json(product);
 
     } catch (err) {
         console.log(err);
         res.status(500).json({
             error: err
-        })
+        });
     }
 });
 
 //delete product
-apiRouter.delete('/products/:productId', (req: express.Request, res: express.Response) => {
+apiRouter.delete('/products/:productId', async (req: express.Request, res: express.Response): Promise<any> => {
     let { productId }: any = req.params;
-    res.status(200).json({
-        msg: 'Delete a product',
-        productId: productId
-    });
+    try {
+        let product: Product | null = await ProductTable.findById(productId);
+        if (!product) {
+            return res.status(404).json({
+                msg: 'Product Not Found!'
+            });
+        }
+        // delete product
+        product = await ProductTable.findByIdAndDelete(productId);
+        res.status(200).json(product);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    }
 });
 
 
