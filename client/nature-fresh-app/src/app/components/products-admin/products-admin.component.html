@@ -22,15 +22,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
+                    <tr *ngFor="let product of products; let i = index">
+                        <td>{{ i+1 }}</td>
                         <td>
-                            <img height="50" width="50"
-                                src="https://img.freepik.com/free-photo/tomatoes_1232-1910.jpg?semt=ais_hybrid" alt="">
+                            <img height="50" width="50" [src]="product.image" alt="Product Image">
                         </td>
-                        <td>Tomato</td>
-                        <td>Rs. 50.00</td>
-                        <td>1 Kg(s)</td>
+                        <td>{{product.name}}</td>
+                        <td>Rs. {{product.price}}</td>
+                        <td>{{product.quantity}} Kg(s)</td>
                         <td>
                             <a routerLink="/" class="btn btn-primary btn-sm">
                                 <i class="fa fa-edit"></i>

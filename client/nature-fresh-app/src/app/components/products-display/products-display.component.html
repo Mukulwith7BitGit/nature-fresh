@@ -7,23 +7,22 @@
 </div>
 
 <div class="container mt-3">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card shadow-lg">
-                <div class="card-header bg-white">
-                    <img src="https://img.freepik.com/free-photo/tomatoes_1232-1910.jpg?semt=ais_hybrid" alt=""
-                        class="img-fluid">
+    <div class="row g-4"> <!-- Add Bootstrap gutter class to give space in between rows -->
+        <div class="col-md-3" *ngFor="let product of products">
+            <div class="card shadow-lg h-100">
+                <div class="card-header bg-white p-0">
+                    <img [src]="product.image" alt="Product Image" class="img-fluid card-img">
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <span class="fw-bold">NAME:</span> Tomato
+                            <span class="fw-bold">NAME:</span> {{product.name}}
                         </li>
                         <li class="list-group-item">
-                            <span class="fw-bold">PRICE:</span>
+                            <span class="fw-bold">PRICE:</span> Rs. {{product.price}}/-
                         </li>
                         <li class="list-group-item">
-                            <span class="fw-bold">QUANTITY:</span>
+                            <span class="fw-bold">QUANTITY:</span> {{product.quantity}} kg(s)
                         </li>
                     </ul>
                 </div>
