@@ -1,1 +1,58 @@
-<p>edit-product works!</p>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col">
+            <p class="h3 text-success">Edit Product</p>
+        </div>
+    </div>
+</div>
+<!-- pre tag is short for preformatted text -->
+<!-- <pre>{{selectedProduct | json}}</pre> -->
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-4">
+            <form (submit)="submitUpdateProduct()">
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product Name<span class="text-danger"> *</span></label>
+                    <input name="name" [(ngModel)]="selectedProduct.name" type="text" class="form-control"
+                        placeholder="Name">
+                    <span class="text-danger" *ngIf="isNameEmpty" style="font-style: italic;">Please enter the product
+                        name.</span>
+                </div>
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product Image<span class="text-danger"> *</span></label>
+                    <input name="image" [(ngModel)]="selectedProduct.image" type="text" class="form-control"
+                        placeholder="Image URL">
+                    <span class="text-danger" *ngIf="isImageEmpty" style="font-style: italic;">Please enter the product
+                        image URL.</span>
+                </div>
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product Price (Rs.)<span class="text-danger">
+                            *</span></label>
+                    <input name="price" [(ngModel)]="selectedProduct.price" type="number" min="1" class="form-control"
+                        placeholder="Price">
+                    <span class="text-danger" *ngIf="isPriceEmpty" style="font-style: italic;">Please enter the product
+                        price.</span>
+                </div>
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product Quantity (kgs.)<span class="text-danger">
+                            *</span></label>
+                    <input name="quantity" [(ngModel)]="selectedProduct.quantity" type="number" min="1"
+                        class="form-control" placeholder="Quantity">
+                    <span class="text-danger" *ngIf="isQuantityEmpty" style="font-style: italic;">Please enter the
+                        product quantity.</span>
+                </div>
+                <div class="mb-3">
+                    <label for="productName" class="form-label">Product Details<span class="text-danger">
+                            *</span></label>
+                    <textarea name="info" [(ngModel)]="selectedProduct.info" rows="4" class="form-control"
+                        placeholder="Information"></textarea>
+                    <span class="text-danger" *ngIf="isInfoEmpty" style="font-style: italic;">Please enter the product
+                        details.</span>
+                </div>
+                <div class="mb-3">
+                    <input type="submit" class="btn btn-success btn-sm" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
