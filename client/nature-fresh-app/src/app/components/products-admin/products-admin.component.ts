@@ -26,7 +26,8 @@ export class ProductsAdminComponent implements OnInit {
   }
 
   deleteProduct(productId: string | undefined) {
-    if (productId) {
+    let confirmDelete = confirm("Are you sure you want to delete this product permanently?");
+    if (confirmDelete && productId) {
       this.productService.deleteProduct(productId).subscribe((data) => {
         this.productService.getAllProducts().subscribe((data: ProductView[]) => {
           this.products = data;
