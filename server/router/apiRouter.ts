@@ -20,7 +20,6 @@ apiRouter.post('/products', async (req: express.Request, res: express.Response):
             quantity: req.body.quantity,
             info: req.body.info
         };
-
         //in short we can write it as: 
         // let { name, image, price, quantity, info } = req.body;
         // let product = { name, image, price, quantity, info };
@@ -63,7 +62,8 @@ apiRouter.post('/products', async (req: express.Request, res: express.Response):
         * product = await ProductTable.create(product);
         */
 
-        res.status(200).json(product);
+        console.log("new product insesrted  on server side:", req.body);
+        return res.status(200).json(product);
     } catch (err) {
         console.log(err);
         res.status(500).json({
@@ -76,7 +76,7 @@ apiRouter.post('/products', async (req: express.Request, res: express.Response):
 apiRouter.get('/products', async (req: express.Request, res: express.Response): Promise<any> => {
     try {
         let products: Product[] = await ProductTable.find();
-        res.status(200).json(products);
+        return res.status(200).json(products);
     } catch (err) {
         console.log(err);
         res.status(500).json({
@@ -141,7 +141,7 @@ apiRouter.put('/products/:productId', async (req: express.Request, res: express.
             }
         }, { new: true });
 
-        res.status(200).json(product);
+        return res.status(200).json(product);
 
     } catch (err) {
         console.log(err);
@@ -163,7 +163,7 @@ apiRouter.delete('/products/:productId', async (req: express.Request, res: expre
         }
         // delete product
         product = await ProductTable.findByIdAndDelete(productId);
-        res.status(200).json(product);
+        return res.status(200).json(product);
     } catch (err) {
         console.log(err);
         res.status(500).json({

@@ -8,6 +8,12 @@ import apiRouter from './router/apiRouter';
 const app: express.Application = express();
 
 app.use(cors());
+
+/* without this express.json() req object will be undefined
+* by default express doesn't parse the body of incoming requests, 
+* we need to explicitly include a middleware for this
+*/
+app.use(express.json());
 dotenv.config({ path: './.env' });
 
 
