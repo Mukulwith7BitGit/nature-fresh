@@ -1,1 +1,47 @@
-<p>products-admin works!</p>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col">
+            <p class="h3 text-success">Products Admin</p>
+            <a routerLink="/products/add" class="btn btn-success btn-sm">Create New</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped table-hover text-center">
+                <thead class="bg-success text-white">
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Product</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <img height="50" width="50"
+                                src="https://img.freepik.com/free-photo/tomatoes_1232-1910.jpg?semt=ais_hybrid" alt="">
+                        </td>
+                        <td>Tomato</td>
+                        <td>Rs. 50.00</td>
+                        <td>1 Kg(s)</td>
+                        <td>
+                            <a routerLink="/" class="btn btn-primary btn-sm">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <button class="btn btn-danger btn-sm">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
