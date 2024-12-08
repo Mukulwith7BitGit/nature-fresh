@@ -25,4 +25,17 @@ export class ProductsAdminComponent implements OnInit {
     });
   }
 
+  deleteProduct(productId: string | undefined) {
+    if (productId) {
+      this.productService.deleteProduct(productId).subscribe((data) => {
+        this.productService.getAllProducts().subscribe((data: ProductView[]) => {
+          this.products = data;
+        }, (error) => {
+          this.errorMessage = error;
+        });
+      }, (error) => {
+        this.errorMessage = error;
+      })
+    }
+  }
 }
