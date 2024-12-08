@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './products-admin.component.html',
-  styleUrl: './products-admin.component.css'
+  styleUrls: ['./products-admin.component.css'],
 })
 export class ProductsAdminComponent {
 
